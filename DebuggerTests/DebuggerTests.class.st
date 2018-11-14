@@ -12,7 +12,7 @@ Class {
 DebuggerTests >> setUp [
 	| process |
 	super setUp.
-	context := [ |var| var:=4] asContext.
+	context := TestableContext on: [ |var| var:=4] asContext.
 	process := Process 
 	    forContext: context 
 	    priority: Processor userInterruptPriority.

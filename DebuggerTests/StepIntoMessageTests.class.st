@@ -14,7 +14,7 @@ Class {
 StepIntoMessageTests >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
-	context := [ assistant callQuickMethodWithoutReturningItsResult] asContext.
+	context := TestableContext on: [ assistant callQuickMethodWithoutReturningItsResult] asContext.
 	process := Process 
 	    forContext: context 
 	    priority: Processor userInterruptPriority.

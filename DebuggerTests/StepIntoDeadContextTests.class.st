@@ -14,7 +14,7 @@ Class {
 StepIntoDeadContextTests >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
-	context := [ ] asContext.
+	context := TestableContext on: [ ] asContext.
 	process := Process 
 	    forContext: context 
 	    priority: Processor userInterruptPriority.

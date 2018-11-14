@@ -14,7 +14,7 @@ Class {
 StepIntoUsedQuickMethodCallReturnTests >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
-	context := [ assistant returnQuickMethodResult] asContext.
+	context := TestableContext on: [ assistant returnQuickMethodResult] asContext.
 	process := Process 
 	    forContext: context 
 	    priority: Processor userInterruptPriority.
