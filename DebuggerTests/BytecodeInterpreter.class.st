@@ -671,8 +671,8 @@ BytecodeInterpreter >> failPrimitiveWith: maybePrimFailToken [
 	 bytecode and store the primitive fail code if there is one and the method consumes it."
 	self skipCallPrimitive.
 	((self isPrimFailToken: maybePrimFailToken)
-	  and: [method encoderClass isStoreAt: pc in: method]) ifTrue:
-		[self at: stackp put: maybePrimFailToken last]
+	  and: [self method encoderClass isStoreAt: pc in: self method]) ifTrue:
+		[self at: self stackp put: maybePrimFailToken last]
 ]
 
 { #category : #query }
@@ -757,7 +757,7 @@ BytecodeInterpreter >> findSimilarSender [
 	"Return the closest sender with the same method, return nil if none found"
 
 	^ self sender findContextSuchThat: [ :context | 
-		context method == method ]
+		context method == self method ]
 ]
 
 { #category : #'private-exceptions' }
@@ -1017,7 +1017,7 @@ BytecodeInterpreter >> isHandlerContext [
 BytecodeInterpreter >> isHandlerOrSignalingContext [
 	"Both BlockClosure>>on:do: (handler) and Context>>evaluateSignal: (signaling) 
 	are marked with primitive 199."
-	^method primitive = 199
+	^self method primitive = 199
 ]
 
 { #category : #private }
@@ -1030,7 +1030,7 @@ BytecodeInterpreter >> isPrimFailToken: anObject [
 { #category : #'private-exceptions' }
 BytecodeInterpreter >> isUnwindContext [
 	"is this context for  method that is marked?"
-	^method primitive = 198
+	^self method primitive = 198
 ]
 
 { #category : #controlling }
@@ -1142,7 +1142,7 @@ BytecodeInterpreter >> nextHandlerContext [
 BytecodeInterpreter >> numArgs [
 	"Answer the number of arguments for this activation."
 	^closureOrNil
-		ifNil: [method numArgs]
+		ifNil: [self method numArgs]
 		ifNotNil: [closureOrNil numArgs]
 ]
 
@@ -1151,7 +1151,7 @@ BytecodeInterpreter >> numTemps [
 	"Answer the number of temporaries for this activation; this includes
 	 the number of arguments, and for blocks, the number of copied values."
 	^closureOrNil
-		ifNil: [method numTemps]
+		ifNil: [self method numTemps]
 		ifNotNil: [closureOrNil numTemps]
 ]
 
@@ -1376,7 +1376,7 @@ BytecodeInterpreter >> printDetails: stream [
 	stream cr.
 	stream tab; nextPutAll: 'Receiver: '.
 	errorMessage := '<<error during printing>>'.
-	stream nextPutAll: ([receiver printStringLimitedTo: 90] ifError: [errorMessage]).
+	stream nextPutAll: ([self receiver printStringLimitedTo: 90] ifError: [errorMessage]).
 
 	stream cr; tab; nextPutAll: 'Arguments and temporary variables: '; cr.
 	string := [(self tempsAndValuesLimitedTo: 80 indent: 2) 
@@ -1384,10 +1384,10 @@ BytecodeInterpreter >> printDetails: stream [
 	stream nextPutAll: (string allButLast).
 
 	stream cr; tab; nextPutAll: 'Receiver''s instance variables: '; cr.
-	receiver class allInstVarNames isEmpty ifTrue: [ 
-		stream nextPutAll: ([receiver printStringLimitedTo: 90] ifError: [ errorMessage ]).
+	self receiver class allInstVarNames isEmpty ifTrue: [ 
+		stream nextPutAll: ([self receiver printStringLimitedTo: 90] ifError: [ errorMessage ]).
 	] ifFalse: [
-		[receiver longPrintOn: stream limitedTo: 80 indent: 2] ifError: [ stream nextPutAll: errorMessage ].
+		[self receiver longPrintOn: stream limitedTo: 80 indent: 2] ifError: [ stream nextPutAll: errorMessage ].
 	].
 	stream cr
 ]
@@ -1430,24 +1430,19 @@ BytecodeInterpreter >> privRefresh [
 			1 to: closureOrNil numCopiedValues do:
 				[:i | self tempAt: closureOrNil numArgs + i put: (closureOrNil at: i)]]
 		ifNil:
-			[pc := method initialPC.
-			self stackp: method numTemps.
-			method numArgs+1 to: method numTemps do:
+			[pc := self method initialPC.
+			self stackp: self method numTemps.
+			self method numArgs+1 to: self method numTemps do:
 				[:i | self tempAt: i put: nil]]
 ]
 
 { #category : #'initialize-release' }
-BytecodeInterpreter >> privRefreshWith: aCompiledMethod [ 
+BytecodeInterpreter >> privRefreshWith: aCompiledMethod [
 	"Reinitialize the receiver as though it had been for a different method. 
 	 Used by a Debugger when one of the methods to which it refers is 
 	 recompiled."
-
-	aCompiledMethod isCompiledMethod ifFalse:
-		[self error: 'method can only be set to aCompiledMethod'].
-	method := aCompiledMethod.
-	[closureOrNil == nil] assert.
-	"was: receiverMap := nil."
-	self privRefresh
+	
+	currentContext privRefreshWith: aCompiledMethod
 ]
 
 { #category : #private }
@@ -1508,8 +1503,8 @@ BytecodeInterpreter >> pushClosureCopyNumCopiedValues: numCopied numArgs: numArg
 				copiedValues at: i put: self pop ]]
 		ifFalse: [ copiedValues := nil ].
 	self push: (BlockClosure
-				outerContext: self
-				startpc: pc
+				outerContext: self currentContext
+				startpc: self pc
 				numArgs: numArgs
 				copiedValues: copiedValues).
 	self jump: blockSize
@@ -1543,7 +1538,7 @@ BytecodeInterpreter >> pushFullClosure: compiledBlock numCopied: numCopied recei
 	copiedValues := (1 to: numCopied) collect: [ :i | self pop ].
 	self push: (cls := (FullBlockClosure new: numCopied) 
 		outerContext: (ignore ifFalse: [self]);
-		receiver: (onStack ifTrue: [ self pop ] ifFalse: [ receiver ]);
+		receiver: (onStack ifTrue: [ self pop ] ifFalse: [ self receiver ]);
 		numArgs: compiledBlock numArgs;
 		compiledBlock: compiledBlock;
 		yourself).
@@ -1599,13 +1594,13 @@ BytecodeInterpreter >> pushTemporaryVariable: offset [
 { #category : #accessing }
 BytecodeInterpreter >> receiver [ 
 
-	^receiver
+	^ currentContext receiver
 ]
 
 { #category : #'private-exceptions' }
 BytecodeInterpreter >> receiver: anObject [
 
-	receiver := anObject
+	currentContext receiver: anObject
 ]
 
 { #category : #'debugger access' }
@@ -1634,10 +1629,7 @@ BytecodeInterpreter >> releaseTo: caller [
 BytecodeInterpreter >> removeSelf [
 	"Nil the receiver pointer and answer its former value."
 
-	| tempSelf |
-	tempSelf := receiver.
-	receiver := nil.
-	^tempSelf
+	^ currentContext removeSelf
 ]
 
 { #category : #controlling }
@@ -1861,32 +1853,6 @@ In this method we cope such information from one to another one."
 
 ]
 
-{ #category : #private }
-BytecodeInterpreter >> setSender: newSender receiver: newReceiver method: newMethod arguments: arguments [ 
-	"Create the receiver's initial state."
-
-	sender := newSender.
-	receiver := newReceiver.
-	method := newMethod.
-	closureOrNil := nil.
-	pc := method initialPC.
-	self stackp: method numTemps.
-	1 to: arguments size do: [ :i | 
-		self at: i put: (arguments at: i)]
-]
-
-{ #category : #private }
-BytecodeInterpreter >> setSender: newSender receiver: newReceiver method: newMethod closure: newClosure startpc: startpc [
-	"Create the receiver's initial state."
-
-	sender := newSender.
-	receiver := newReceiver.
-	method := newMethod.
-	closureOrNil := newClosure.
-	pc := startpc.
-	stackp := 0
-]
-
 { #category : #controlling }
 BytecodeInterpreter >> shortDebugStack [
 	"Answer a String showing the top ten contexts on my sender chain."
@@ -2003,7 +1969,7 @@ BytecodeInterpreter >> stepUntilSomethingOnStack [
 	returning a value to the receiver (that is, until switching contexts)."
 
 	| context |
-	[ stackp = 0 ]
+	[ self stackp = 0 ]
 		whileTrue: [
 			self isDead ifTrue: [ ^ self ].
 			context := self step.
@@ -2046,7 +2012,7 @@ BytecodeInterpreter >> storeIntoTemporaryVariable: offset [
 { #category : #'private-exceptions' }
 BytecodeInterpreter >> swapReceiver: newReceiver [
 
-	receiver := newReceiver
+	currentContext swapReceiver: newReceiver
 ]
 
 { #category : #'debugger access' }
