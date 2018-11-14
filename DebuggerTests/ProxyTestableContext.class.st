@@ -1,7 +1,7 @@
 Class {
 	#name : #ProxyTestableContext,
 	#superclass : #AbstractTestableContext,
-	#category : #DebuggerTests
+	#category : #'DebuggerTests-TestableContexts'
 }
 
 { #category : #'reflective operations' }

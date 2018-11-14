@@ -1,7 +1,10 @@
 Class {
 	#name : #TestableContext,
 	#superclass : #AbstractTestableContext,
-	#category : #DebuggerTests
+	#instVars : [
+		'messages'
+	],
+	#category : #'DebuggerTests-TestableContexts'
 }
 
 { #category : #'instance creation' }

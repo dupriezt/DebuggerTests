@@ -5,7 +5,7 @@ Class {
 		'realContext',
 		'cache'
 	],
-	#category : #DebuggerTests
+	#category : #'DebuggerTests-TestableContexts'
 }
 
 { #category : #'instance creation' }

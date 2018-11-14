@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'messages'
 	],
-	#category : #DebuggerTests
+	#category : #'DebuggerTests-TestableContexts'
 }
 
 { #category : #'reflective operations' }
