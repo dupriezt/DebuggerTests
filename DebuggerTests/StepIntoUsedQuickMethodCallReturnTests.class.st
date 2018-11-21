@@ -1,9 +1,7 @@
 Class {
 	#name : #StepIntoUsedQuickMethodCallReturnTests,
-	#superclass : #TestCase,
+	#superclass : #DebuggerTests,
 	#instVars : [
-		'context',
-		'session',
 		'assistant',
 		'process'
 	],

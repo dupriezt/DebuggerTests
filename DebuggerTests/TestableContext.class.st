@@ -1,6 +1,6 @@
 Class {
 	#name : #TestableContext,
-	#superclass : #AbstractTestableContext,
+	#superclass : #TestableInstructionStream,
 	#instVars : [
 		'messages'
 	],
@@ -47,6 +47,12 @@ TestableContext >> method [
 ]
 
 { #category : #accessing }
+TestableContext >> methodClass [
+	
+	^ realContext methodClass
+]
+
+{ #category : #accessing }
 TestableContext >> pc: aPC [
 	
 	realContext pc: aPC
@@ -65,10 +71,34 @@ TestableContext >> return: value from: aSender [
 	^ self testableContextFor: (realContext return: value from: aSender realContext)
 ]
 
+{ #category : #accessing }
+TestableContext >> selector [
+	
+	^ realContext selector
+]
+
 { #category : #thingsCalledByDebugger }
 TestableContext >> sender [
 	
 	^ self testableContextFor: realContext sender
+]
+
+{ #category : #accessing }
+TestableContext >> sourceCode [
+	
+	^ realContext sourceCode
+]
+
+{ #category : #accessing }
+TestableContext >> stack [
+	
+	^ realContext stack
+]
+
+{ #category : #accessing }
+TestableContext >> stackOfSize: limit [ 
+	
+	^ realContext stackOfSize: limit 
 ]
 
 { #category : #thingsCalledByDebugger }

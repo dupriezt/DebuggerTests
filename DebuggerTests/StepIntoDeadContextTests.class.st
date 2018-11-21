@@ -1,9 +1,7 @@
 Class {
 	#name : #StepIntoDeadContextTests,
-	#superclass : #TestCase,
+	#superclass : #DebuggerTests,
 	#instVars : [
-		'context',
-		'session',
 		'assistant',
 		'process'
 	],

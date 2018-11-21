@@ -1,9 +1,7 @@
 Class {
 	#name : #StepIntoMessageTests,
-	#superclass : #TestCase,
+	#superclass : #DebuggerTests,
 	#instVars : [
-		'context',
-		'session',
 		'assistant',
 		'process'
 	],
