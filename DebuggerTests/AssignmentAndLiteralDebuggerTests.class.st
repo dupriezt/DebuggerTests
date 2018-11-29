@@ -16,8 +16,17 @@ AssignmentAndLiteralDebuggerTests >> setUp [
 ]
 
 { #category : #tests }
+AssignmentAndLiteralDebuggerTests >> testInterruptedContextEqualsSuspendedContextOfInterruptedProcess [
+	self assert: session interruptedContext equals: session interruptedProcess suspendedContext.
+	session stepInto.
+	session stepInto.
+	self assert: session interruptedContext equals: session interruptedProcess suspendedContext.
+]
+
+{ #category : #tests }
 AssignmentAndLiteralDebuggerTests >> testNewDebugSession [
 	self assert: context size equals: 0.
+	self assert: session interruptedContext equals: context.
 ]
 
 { #category : #tests }
