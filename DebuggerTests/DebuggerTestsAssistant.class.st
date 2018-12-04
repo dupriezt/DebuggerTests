@@ -18,3 +18,10 @@ DebuggerTestsAssistant >> quickMethod [
 DebuggerTestsAssistant >> returnQuickMethodResult [
 	^ self quickMethod.
 ]
+
+{ #category : #'as yet unclassified' }
+DebuggerTestsAssistant >> stepThroughHelper: aBlock [
+	aBlock value.
+	^1.
+	
+]

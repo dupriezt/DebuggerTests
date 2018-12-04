@@ -6,7 +6,6 @@ Class {
 
 { #category : #tests }
 AssignmentAndLiteralDebuggerTests >> setUp [
-	| process |
 	super setUp.
 	context := TestableContext on: [ |var| var:=4] asContext.
 	process := Process 

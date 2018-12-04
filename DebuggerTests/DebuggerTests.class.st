@@ -7,7 +7,8 @@ Class {
 	#superclass : #TestCase,
 	#instVars : [
 		'context',
-		'session'
+		'session',
+		'process'
 	],
 	#category : #DebuggerTests
 }

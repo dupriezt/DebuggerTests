@@ -2,8 +2,7 @@ Class {
 	#name : #StepIntoMessageTests,
 	#superclass : #DebuggerTests,
 	#instVars : [
-		'assistant',
-		'process'
+		'assistant'
 	],
 	#category : #DebuggerTests
 }

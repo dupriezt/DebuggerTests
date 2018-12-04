@@ -2,8 +2,7 @@ Class {
 	#name : #StepIntoDeadContextTests,
 	#superclass : #DebuggerTests,
 	#instVars : [
-		'assistant',
-		'process'
+		'assistant'
 	],
 	#category : #DebuggerTests
 }
@@ -21,6 +20,7 @@ StepIntoDeadContextTests >> setUp [
 
 { #category : #tests }
 StepIntoDeadContextTests >> testStepIntoDeadContextShouldRaiseException [
+
 	session stepInto. "The first step into executes the (empty) body of the block and returns from it. From this point on, the context is dead since it returned."
 	
 	"We should be able to call stepInto.

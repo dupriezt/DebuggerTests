@@ -2,8 +2,7 @@ Class {
 	#name : #StepIntoUsedQuickMethodCallReturnTests,
 	#superclass : #DebuggerTests,
 	#instVars : [
-		'assistant',
-		'process'
+		'assistant'
 	],
 	#category : #DebuggerTests
 }
