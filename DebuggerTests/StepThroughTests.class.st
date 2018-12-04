@@ -27,3 +27,16 @@ StepThroughTests >> testStepThrough [
 	self assert: (session interruptedContext method) equals: (DebuggerTestsAssistant>>#stepThroughHelper:).
 	
 ]
+
+{ #category : #tests }
+StepThroughTests >> testStepThroughDoesTheSameThingAsStepOverWhenNoBlockReturns [
+	|pcStepOver pcStepThrough|
+	session stepOver.
+	session stepOver.
+	pcStepOver := session interruptedContext pc.
+	self setUp.
+	session stepThrough.
+	session stepThrough.
+	pcStepThrough := session interruptedContext pc.
+	self assert: pcStepOver equals: pcStepThrough.
+]
