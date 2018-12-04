@@ -101,6 +101,11 @@ TestableContext >> stackOfSize: limit [
 	^ realContext stackOfSize: limit 
 ]
 
+{ #category : #accessing }
+TestableContext >> startpc [
+	^ realContext startpc.
+]
+
 { #category : #thingsCalledByDebugger }
 TestableContext >> step [
 

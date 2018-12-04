@@ -19,6 +19,19 @@ StepIntoDeadContextTests >> setUp [
 ]
 
 { #category : #tests }
+StepIntoDeadContextTests >> testDetectionOfExecutionEnd [
+	session stepInto.
+	"These ways do not detect that the execution ended"
+	self assert: session interruptedContext isDead not.
+	self assert: (session isContextPostMortem: (session interruptedContext)) not.
+	self assert: session interruptedProcess suspendedContext isNil not.
+	self assert: session interruptedProcess suspendedContext isDead not.
+	"This way seems to detect that an execution ended"
+	self assert: session interruptedProcess isTerminated.
+
+]
+
+{ #category : #tests }
 StepIntoDeadContextTests >> testStepIntoDeadContextShouldRaiseException [
 
 	session stepInto. "The first step into executes the (empty) body of the block and returns from it. From this point on, the context is dead since it returned."
