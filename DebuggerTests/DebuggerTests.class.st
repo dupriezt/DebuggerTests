@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-DebuggerTests class >> debuggerOnSetUpSession [
+DebuggerTests class >> openDebuggerOnSetUpSession [
 	GTGenericStackDebugger new openOn: (self new setUp session).
 ]
 
