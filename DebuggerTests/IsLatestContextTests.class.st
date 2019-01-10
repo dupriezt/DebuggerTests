@@ -2,13 +2,13 @@
 Testing the DebugSession>isLatestContext: method
 "
 Class {
-	#name : #IsLatestContextTest,
+	#name : #IsLatestContextTests,
 	#superclass : #DebuggerTests,
 	#category : #DebuggerTests
 }
 
 { #category : #running }
-IsLatestContextTest >> setUp [
+IsLatestContextTests >> setUp [
 	super setUp.
 	context := [ IsLatestContextTestAssistant method1] asContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
@@ -16,7 +16,7 @@ IsLatestContextTest >> setUp [
 ]
 
 { #category : #tests }
-IsLatestContextTest >> testIsLatestContextTest [
+IsLatestContextTests >> testIsLatestContextTest [
 	"Checking that a Context that has nothing to do with the debugged execution is not LatestContext"
 	self assert: (session isLatestContext: [] asContext) not.
 	

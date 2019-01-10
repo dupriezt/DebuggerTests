@@ -3,13 +3,13 @@ Testing the DebugSession>isLatestContext: method, using a TestableContext to wra
 This has an impact on the last line of testIsLatestContextTest.
 "
 Class {
-	#name : #'IsLatestContextTest_WithTestableContext',
+	#name : #'IsLatestContextTests_WithTestableContext',
 	#superclass : #DebuggerTests,
 	#category : #DebuggerTests
 }
 
 { #category : #running }
-IsLatestContextTest_WithTestableContext >> setUp [
+IsLatestContextTests_WithTestableContext >> setUp [
 	super setUp.
 	context := TestableContext on: [ IsLatestContextTestAssistant method1] asContext.
 	process := Process forContext: context priority: Processor userInterruptPriority.
@@ -17,7 +17,7 @@ IsLatestContextTest_WithTestableContext >> setUp [
 ]
 
 { #category : #tests }
-IsLatestContextTest_WithTestableContext >> testIsLatestContextTest [
+IsLatestContextTests_WithTestableContext >> testIsLatestContextTest [
 	"Checking that a Context that has nothing to do with the debugged execution is not LatestContext"
 	self assert: (session isLatestContext: [] asContext) not.
 	
