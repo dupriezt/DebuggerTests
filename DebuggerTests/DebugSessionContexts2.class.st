@@ -1,9 +1,6 @@
 Class {
 	#name : #DebugSessionContexts2,
 	#superclass : #DebuggerTests,
-	#instVars : [
-		'debuggedThisContext'
-	],
 	#classVars : [
 		'debugSession'
 	],
