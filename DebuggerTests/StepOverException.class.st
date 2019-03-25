@@ -26,10 +26,49 @@ StepOverException >> step4 [
 ]
 
 { #category : #tests }
+StepOverException >> stepA1 [
+	self stepA2.
+	^ 42.
+]
+
+{ #category : #tests }
+StepOverException >> stepA2 [
+	^ True
+]
+
+{ #category : #tests }
+StepOverException >> stepB1 [
+	self stepB2.
+	^42.
+]
+
+{ #category : #tests }
+StepOverException >> stepB2 [
+	self stepB3
+]
+
+{ #category : #tests }
+StepOverException >> stepB3 [
+	^ 42
+]
+
+{ #category : #tests }
 StepOverException >> testErrorSignalledDuringStepOverShouldBeCaught [
 	"An Error signaled while being steppedOver should not be unhandled"
 	self settingUpSessionAndProcessAndContextForBlock: [ Error signal: 'hey'. ].
 	self shouldnt: [[ session interruptedProcess isTerminated ] whileFalse: [ session stepOver. ]] raise: Error.
+]
+
+{ #category : #tests }
+StepOverException >> testStepOver [
+	"Stepping over a message node brings the execution to the next node in the same method."
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepA1 ].
+	session stepInto.
+	session stepInto.
+	"Reached stepA1"
+	session stepOver.
+	"Checking if the stepOver stepped over the call to stepA2 and brought the execution to the return node of stepA1"
+	self assert: (StepOverException>>#stepA1 sourceNodeForPC: session interruptedContext pc) isReturn.
 ]
 
 { #category : #tests }
@@ -44,6 +83,28 @@ StepOverException >> testStepOverHalt [
 	"Stepping over a self halt should not raise an unhandled exception"
 	self settingUpSessionAndProcessAndContextForBlock: [ self halt. ].
 	self shouldnt: [[ session interruptedProcess isTerminated ] whileFalse: [ session stepOver. ]] raise: Exception.
+]
+
+{ #category : #tests }
+StepOverException >> testStepOverLastNodeOfContext [
+	"Stepping over the last node of a method brings the execution to the method node of that method."
+	| node |
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepB1 ].
+	session stepInto.
+	session stepInto.
+	"Reached stepB1"
+	session stepInto.
+	"Reached stepB2"
+	"Checking that the execution is at the 'self stepB3' node of the stepB2 method"
+	self assert: session interruptedContext method equals: self class >>#stepB2.
+	node := self class >>#stepB2 sourceNodeForPC: session interruptedContext pc.
+	self assert: node receiver isSelf.
+	self assert: node selector equals: #stepB3.
+	session stepOver.
+	"Checking that after the stepOver, the execution is at the method node of the stepB2 method"
+	self assert: session interruptedContext method equals: self class >>#stepB2.
+	node := self class >>#stepB2 sourceNodeForPC: session interruptedContext pc.
+	self assert: node isMethod.
 ]
 
 { #category : #tests }
