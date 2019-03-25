@@ -10,9 +10,7 @@ Class {
 { #category : #running }
 IsLatestContextTests >> setUp [
 	super setUp.
-	context := [ IsLatestContextTestAssistant method1] asContext.
-	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := process newDebugSessionNamed: 'test session' startedAt: context
+	self settingUpSessionAndProcessAndContextForBlock: [ IsLatestContextTestAssistant method1].
 ]
 
 { #category : #tests }

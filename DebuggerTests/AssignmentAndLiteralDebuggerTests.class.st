@@ -7,11 +7,7 @@ Class {
 { #category : #tests }
 AssignmentAndLiteralDebuggerTests >> setUp [
 	super setUp.
-	context := TestableContext on: [ |var| var:=4] asContext.
-	process := Process 
-	    forContext: context 
-	    priority: Processor userInterruptPriority.
-	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+	self settingUpSessionAndProcessAndContextForBlock: [ |var| var:=4].
 ]
 
 { #category : #tests }

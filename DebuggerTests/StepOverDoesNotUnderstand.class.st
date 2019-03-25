@@ -11,11 +11,7 @@ Class {
 StepOverDoesNotUnderstand >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
-	context := [ assistant messageNotUnderstood] asContext.
-	process := Process 
-	    forContext: context 
-	    priority: Processor userInterruptPriority.
-	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+	self settingUpSessionAndProcessAndContextForBlock: [ assistant messageNotUnderstood]
 ]
 
 { #category : #tests }

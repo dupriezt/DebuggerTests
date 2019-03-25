@@ -7,11 +7,7 @@ Class {
 { #category : #running }
 StepOverHalt >> setUp [
 	super setUp.
-	context := [ self halt. ] asContext.
-	process := Process 
-	    forContext: context 
-	    priority: Processor userInterruptPriority.
-	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+	self settingUpSessionAndProcessAndContextForBlock: [ self halt. ]
 ]
 
 { #category : #tests }

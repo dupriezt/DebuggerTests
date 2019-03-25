@@ -17,9 +17,7 @@ IsContextPostMortemTests >> doSomething2 [
 { #category : #running }
 IsContextPostMortemTests >> setUp [
 	super setUp.
-	context := [ self doSomething ] asContext.
-	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := process newDebugSessionNamed: 'test session' startedAt: context
+	self settingUpSessionAndProcessAndContextForBlock: [ self doSomething ].
 ]
 
 { #category : #tests }

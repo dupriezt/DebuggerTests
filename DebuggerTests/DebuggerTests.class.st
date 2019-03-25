@@ -22,3 +22,12 @@ DebuggerTests class >> openDebuggerOnSetUpSession [
 DebuggerTests >> session [
 	^ session
 ]
+
+{ #category : #'as yet unclassified' }
+DebuggerTests >> settingUpSessionAndProcessAndContextForBlock: aBlock [
+	context := aBlock asContext.
+	process := Process 
+	    forContext: context 
+	    priority: Processor userInterruptPriority.
+	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+]

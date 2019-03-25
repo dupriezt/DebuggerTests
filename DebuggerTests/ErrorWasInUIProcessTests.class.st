@@ -7,9 +7,7 @@ Class {
 { #category : #running }
 ErrorWasInUIProcessTests >> setUp [
 	super setUp.
-	context := [ 1+1] asContext.
-	process := Process forContext: context priority: Processor userInterruptPriority.
-	session := process newDebugSessionNamed: 'test session' startedAt: context
+	self settingUpSessionAndProcessAndContextForBlock: [ 1+1].
 ]
 
 { #category : #tests }

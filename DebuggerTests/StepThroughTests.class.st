@@ -12,11 +12,7 @@ StepThroughTests >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
 	"Using a TestableContext instead of a normal Context caused the image to freeze when a step through was executed"
-	context := [ assistant stepThroughHelper: [ 'hello' ] ] asContext.
-	process := Process 
-	    forContext: context 
-	    priority: Processor userInterruptPriority.
-	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+	self settingUpSessionAndProcessAndContextForBlock: [ assistant stepThroughHelper: [ 'hello' ] ].
 ]
 
 { #category : #tests }

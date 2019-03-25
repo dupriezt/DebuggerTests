@@ -11,11 +11,7 @@ Class {
 StepIntoUsedQuickMethodCallReturnTests >> setUp [
 	super setUp.
 	assistant := DebuggerTestsAssistant new.
-	context := TestableContext on: [ assistant returnQuickMethodResult] asContext.
-	process := Process 
-	    forContext: context 
-	    priority: Processor userInterruptPriority.
-	session:= process newDebugSessionNamed: 'test session' startedAt: context.
+	self settingUpSessionAndProcessAndContextForBlock: [ assistant returnQuickMethodResult]
 ]
 
 { #category : #tests }
