@@ -7,12 +7,17 @@ Class {
 	#category : #DebuggerTests
 }
 
+{ #category : #helper }
+StepThroughTests >> evalBlockThenReturnOne: aBlock [
+	aBlock value.
+	^1.
+]
+
 { #category : #running }
 StepThroughTests >> setUp [
 	super setUp.
-	assistant := DebuggerTestsAssistant new.
 	"Using a TestableContext instead of a normal Context caused the image to freeze when a step through was executed"
-	self settingUpSessionAndProcessAndContextForBlock: [ assistant stepThroughHelper: [ 'hello' ] ].
+	self settingUpSessionAndProcessAndContextForBlock: [ self evalBlockThenReturnOne: [ 'hello' ] ].
 ]
 
 { #category : #tests }
@@ -20,7 +25,7 @@ StepThroughTests >> testStepThrough [
 	session stepOver.
 	session stepOver.
 	session stepThrough.
-	self assert: (session interruptedContext method) equals: (DebuggerTestsAssistant>>#stepThroughHelper:).
+	self assert: (session interruptedContext method) equals: (self class>>#evalBlockThenReturnOne:).
 	
 ]
 
