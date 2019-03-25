@@ -27,8 +27,23 @@ StepOverException >> step4 [
 
 { #category : #tests }
 StepOverException >> testErrorSignalledDuringStepOverShouldBeCaught [
+	"An Error signaled while being steppedOver should not be unhandled"
 	self settingUpSessionAndProcessAndContextForBlock: [ Error signal: 'hey'. ].
 	self shouldnt: [[ session interruptedProcess isTerminated ] whileFalse: [ session stepOver. ]] raise: Error.
+]
+
+{ #category : #tests }
+StepOverException >> testStepOverDoesNotUnderstand [
+	"Stepping over a message not understood should not raise an unhandled exception"
+	self settingUpSessionAndProcessAndContextForBlock: [ self messageNotUnderstood].
+	self shouldnt: [[ session interruptedProcess isTerminated ] whileFalse: [ session stepOver. ]] raise: Exception.
+]
+
+{ #category : #tests }
+StepOverException >> testStepOverHalt [
+	"Stepping over a self halt should not raise an unhandled exception"
+	self settingUpSessionAndProcessAndContextForBlock: [ self halt. ].
+	self shouldnt: [[ session interruptedProcess isTerminated ] whileFalse: [ session stepOver. ]] raise: Exception.
 ]
 
 { #category : #tests }
