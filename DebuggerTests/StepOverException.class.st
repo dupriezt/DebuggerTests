@@ -62,12 +62,19 @@ StepOverException >> testErrorSignalledDuringStepOverShouldBeCaught [
 { #category : #tests }
 StepOverException >> testStepOver [
 	"Stepping over a message node brings the execution to the next node in the same method."
+	| node |
 	self settingUpSessionAndProcessAndContextForBlock: [ self stepA1 ].
 	session stepInto.
 	session stepInto.
 	"Reached stepA1"
+	"Checking that the execution is at the 'self stepA2' node of the stepA1 method"
+	self assert: session interruptedContext method equals: self class >>#stepA1.
+	node := self class >>#stepA1 sourceNodeForPC: session interruptedContext pc.
+	self assert: node receiver isSelf.
+	self assert: node selector equals: #stepA2.
 	session stepOver.
 	"Checking if the stepOver stepped over the call to stepA2 and brought the execution to the return node of stepA1"
+	self assert: session interruptedContext method equals: self class >>#stepA1.
 	self assert: (StepOverException>>#stepA1 sourceNodeForPC: session interruptedContext pc) isReturn.
 ]
 
