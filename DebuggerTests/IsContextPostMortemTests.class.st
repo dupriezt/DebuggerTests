@@ -4,24 +4,19 @@ Class {
 	#category : #DebuggerTests
 }
 
-{ #category : #'pseudo actions' }
-IsContextPostMortemTests >> doSomething [
-	^ self doSomething2
+{ #category : #helper }
+IsContextPostMortemTests >> stepA1 [
+	^ self stepA2
 ]
 
-{ #category : #'pseudo actions' }
-IsContextPostMortemTests >> doSomething2 [
+{ #category : #helper }
+IsContextPostMortemTests >> stepA2 [
 	^ 42
-]
-
-{ #category : #running }
-IsContextPostMortemTests >> setUp [
-	super setUp.
-	self settingUpSessionAndProcessAndContextForBlock: [ self doSomething ].
 ]
 
 { #category : #tests }
 IsContextPostMortemTests >> testIsContextPostMortem [
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepA1 ].
 	session stepInto.
 	"The top context of the context chain is not post mortem"
 	self assert: (session isContextPostMortem: session interruptedProcess suspendedContext) not.
