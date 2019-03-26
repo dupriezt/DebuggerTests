@@ -8,24 +8,12 @@ Class {
 }
 
 { #category : #helper }
-StepThroughTests >> doSomething [
-	^ 2+2
-]
-
-{ #category : #helper }
 StepThroughTests >> evalBlockThenReturnOne: aBlock [
 	aBlock value.
 	^1.
 ]
 
-{ #category : #running }
-StepThroughTests >> setUp [
-	super setUp.
-	"Using a TestableContext instead of a normal Context caused the image to freeze when a step through was executed"
-	self settingUpSessionAndProcessAndContextForBlock: [ self evalBlockThenReturnOne: [ self doSomething ] ].
-]
-
-{ #category : #running }
+{ #category : #helper }
 StepThroughTests >> stepA1 [
 	self evalBlockThenReturnOne: [ self stepA2 ].
 ]
@@ -35,18 +23,18 @@ StepThroughTests >> stepA2 [
 	^ 2+2
 ]
 
-{ #category : #tests }
+{ #category : #helper }
 StepThroughTests >> stepB1 [
 	self stepB2.
 	self stepB3.
 ]
 
-{ #category : #tests }
+{ #category : #helper }
 StepThroughTests >> stepB2 [
 	^ 42
 ]
 
-{ #category : #tests }
+{ #category : #helper }
 StepThroughTests >> stepB3 [
 	^ 43
 ]

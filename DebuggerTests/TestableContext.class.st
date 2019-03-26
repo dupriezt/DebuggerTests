@@ -1,3 +1,6 @@
+"
+Bug: Using a TestableContext instead of a normal Context caused the image to freeze when a step through was executed
+"
 Class {
 	#name : #TestableContext,
 	#superclass : #TestableInstructionStream,
