@@ -18,11 +18,6 @@ DebugSessionContexts >> setUp [
 
 ]
 
-{ #category : #running }
-DebugSessionContexts >> tearDown [ 
-	process terminate.
-]
-
 { #category : #tests }
 DebugSessionContexts >> testInitialContentOfInterruptedContext [
 	"Checks that the interruptedContext of the DebugSession is the thisContext of the code where the DebugSession was created"

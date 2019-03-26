@@ -28,11 +28,6 @@ DebugSessionContexts2 >> setUp [
 	session := self class debugSession.
 ]
 
-{ #category : #running }
-DebugSessionContexts2 >> tearDown [ 
-	process terminate.
-]
-
 { #category : #tests }
 DebugSessionContexts2 >> testContextsAfterStepInto [
 	"Checks that after one step into of the debug session, the suspendedContext of its interruptedProcess is at the user's code (not in the debugging machinery) and is the same object as the interruptedContext of the DebugSession."
