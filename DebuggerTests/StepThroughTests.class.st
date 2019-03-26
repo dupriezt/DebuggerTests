@@ -36,6 +36,22 @@ StepThroughTests >> stepA2 [
 ]
 
 { #category : #tests }
+StepThroughTests >> stepB1 [
+	self stepB2.
+	self stepB3.
+]
+
+{ #category : #tests }
+StepThroughTests >> stepB2 [
+	^ 42
+]
+
+{ #category : #tests }
+StepThroughTests >> stepB3 [
+	^ 43
+]
+
+{ #category : #tests }
 StepThroughTests >> testStepThrough [
 	"In a context c, define a block b, send a message to another method to get b evaluated.
 	Testing that a step through on this message send moves the execution to the point where the block b is about to be evaluated."
@@ -62,14 +78,32 @@ StepThroughTests >> testStepThrough [
 ]
 
 { #category : #tests }
-StepThroughTests >> testStepThroughDoesTheSameThingAsStepOverWhenNoBlockReturns [
-	|pcStepOver pcStepThrough|
+StepThroughTests >> testStepThroughDoesTheSameThingAsStepOverWhenNoBlockIsInvolved [
+	"Testing that when no block is involved, a step through moves the execution to the same point a step over would"
+	| node |
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepB1 ].
+	session stepInto.
+	session stepInto.
+	"Reached node 'self stepB2' of method stepB1"
+	self assert: session interruptedContext method equals: self class>>#stepB1.
 	session stepOver.
-	session stepOver.
-	pcStepOver := session interruptedContext pc.
-	self setUp.
+	self assert: (session interruptedContext method) equals: (self class>>#stepB1).
+	"Checking that after the step over, we reached the node 'self stepB3' of method stepB1"
+	node := self class>>#stepB1 sourceNodeForPC: session interruptedContext pc.
+	self assert: node isMessage.
+	self assert: node receiver isSelf.
+	self assert: node selector equals: #stepB3.
+	
+	"Set up the debugged execution again"
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepB1 ].
+	session stepInto.
+	session stepInto.
+	"Reached node 'self stepB2' of method stepB1"
+	self assert: session interruptedContext method equals: self class>>#stepB1.
 	session stepThrough.
-	session stepThrough.
-	pcStepThrough := session interruptedContext pc.
-	self assert: pcStepOver equals: pcStepThrough.
+	"Checking that after the step through, we reached the node 'self stepB3' of method stepB1 (the same node that was reached with the step over"
+	node := self class>>#stepB1 sourceNodeForPC: session interruptedContext pc.
+	self assert: node isMessage.
+	self assert: node receiver isSelf.
+	self assert: node selector equals: #stepB3.
 ]
