@@ -29,6 +29,14 @@ DebuggerTests >> session [
 	^ session
 ]
 
+{ #category : #running }
+DebuggerTests >> setUp [
+	"Hooks that subclasses may override to define the fixture of test."
+	context := nil.
+	process := nil.
+	session := nil.
+]
+
 { #category : #'as yet unclassified' }
 DebuggerTests >> settingUpSessionAndProcessAndContextForBlock: aBlock [
 	context := aBlock asContext.
