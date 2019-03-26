@@ -14,11 +14,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-DebuggerTests class >> openDebuggerOnSetUpSession [
-	GTGenericStackDebugger new openOn: (self new setUp session).
-]
-
-{ #category : #'as yet unclassified' }
 DebuggerTests >> inspectCurrentNode: aDebugSession [
 	context := aDebugSession interruptedContext.
 	(context method sourceNodeForPC: context pc) inspect.
