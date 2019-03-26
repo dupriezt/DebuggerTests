@@ -7,14 +7,18 @@ Class {
 	#category : #DebuggerTests
 }
 
-{ #category : #running }
-IsLatestContextTests >> setUp [
-	super setUp.
-	self settingUpSessionAndProcessAndContextForBlock: [ IsLatestContextTestAssistant method1].
+{ #category : #helper }
+IsLatestContextTests >> stepA1 [
+	self stepA2
+]
+
+{ #category : #helper }
+IsLatestContextTests >> stepA2 [
 ]
 
 { #category : #tests }
 IsLatestContextTests >> testIsLatestContextTest [
+	self settingUpSessionAndProcessAndContextForBlock: [ self stepA1 ].
 	"Checking that a Context that has nothing to do with the debugged execution is not LatestContext"
 	self assert: (session isLatestContext: [] asContext) not.
 	
