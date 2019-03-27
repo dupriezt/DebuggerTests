@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 DebugScenario2 >> run [
 	| context process session |
-	context := [ self start] asContext.
+	context := [ self step1] asContext.
 	process := Process 
 	    forContext: context 
 	    priority: Processor userInterruptPriority.
@@ -19,26 +19,26 @@ DebugScenario2 >> run [
 ]
 
 { #category : #accessing }
-DebugScenario2 >> start [
-	^ self step1
-]
-
-{ #category : #accessing }
 DebugScenario2 >> step1 [
-	[ self step2 ] on: Notification do: [ ^2 ].
+	^ self step2
 ]
 
 { #category : #accessing }
 DebugScenario2 >> step2 [
+	[ self step3 ] on: Notification do: [ ^2 ].
+]
+
+{ #category : #accessing }
+DebugScenario2 >> step3 [
 self halt.
 	1+1.
-	self step3.
+	self step4.
 	2+2.
 	^4
 ]
 
 { #category : #accessing }
-DebugScenario2 >> step3 [
+DebugScenario2 >> step4 [
 	self notify: 'hey'
 	"self error: 'hey'"
 ]
